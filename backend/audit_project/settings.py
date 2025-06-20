@@ -143,7 +143,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'apps.authentication.User'
+AUTH_USER_MODEL = 'authentication.User'
 
 # REST Framework settings
 REST_FRAMEWORK = {
