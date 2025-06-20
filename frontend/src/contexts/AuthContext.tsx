@@ -9,6 +9,8 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     register: (email: string, password: string) => Promise<void>;
+    isViewingAsUser: boolean;
+    toggleViewAsUser: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,12 +19,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isViewingAsUser, setIsViewingAsUser] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             authApi.getCurrentUser()
                 .then(userData => {
+                    console.log('Current user data:', userData); // Debug log
                     setUser(userData);
                 })
                 .catch(err => {
@@ -41,9 +45,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setError(null);
             const response = await authApi.login(email, password);
+            console.log('Login response:', response); // Debug log
             localStorage.setItem('token', response.token);
             localStorage.setItem('refresh_token', response.refresh);
             setUser(response.user);
+            setIsViewingAsUser(false);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed');
             throw err;
@@ -51,8 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = () => {
-        authApi.logout();
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
         setUser(null);
+        setIsViewingAsUser(false);
     };
 
     const register = async (email: string, password: string) => {
@@ -62,14 +70,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             localStorage.setItem('token', response.token);
             localStorage.setItem('refresh_token', response.refresh);
             setUser(response.user);
+            setIsViewingAsUser(false);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Registration failed');
             throw err;
         }
     };
 
+    const toggleViewAsUser = () => {
+        setIsViewingAsUser(!isViewingAsUser);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, error, login, logout, register }}>
+        <AuthContext.Provider value={{ 
+            user, 
+            loading, 
+            error, 
+            login, 
+            logout, 
+            register,
+            isViewingAsUser,
+            toggleViewAsUser
+        }}>
             {children}
         </AuthContext.Provider>
     );

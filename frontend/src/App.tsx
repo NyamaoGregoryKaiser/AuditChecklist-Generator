@@ -19,6 +19,7 @@ import ResultsView from './components/audit/ResultsView';
 import ProfilePage from './pages/ProfilePage';
 import AuditsList from './components/audit/AuditsList';
 import EditUser from './pages/admin/EditUser';
+import ClientsPage from './pages/admin/ClientsPage';
 
 const AppRoutes: React.FC = () => {
     return (
@@ -40,6 +41,7 @@ const AppRoutes: React.FC = () => {
                     <Route index element={<AdminDashboard />} />
                     <Route path="users/:id" element={<UserDetails />} />
                     <Route path="users/:id/edit" element={<EditUser />} />
+                    <Route path="clients" element={<ClientsPage />} />
                 </Route>
                 <Route path="audits" element={
                     <ProtectedRoute>

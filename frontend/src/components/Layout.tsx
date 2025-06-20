@@ -13,6 +13,8 @@ import {
     Toolbar,
     Typography,
     Divider,
+    Switch,
+    FormControlLabel,
 } from '@mui/material';
 import {
     Menu as MenuIcon,
@@ -21,6 +23,7 @@ import {
     Logout as LogoutIcon,
     Person as PersonIcon,
     Assessment as AssessmentIcon,
+    People as PeopleIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -28,7 +31,7 @@ const drawerWidth = 240;
 
 const Layout: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
-    const { user, logout } = useAuth();
+    const { user, logout, isViewingAsUser, toggleViewAsUser } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -70,7 +73,7 @@ const Layout: React.FC = () => {
                     </ListItemIcon>
                     <ListItemText primary="Profile" />
                 </ListItem>
-                {!user?.is_staff && (
+                {(!user?.is_staff || isViewingAsUser) && (
                     <ListItem 
                         button 
                         onClick={() => handleNavigation('/audits')}
@@ -82,7 +85,7 @@ const Layout: React.FC = () => {
                         <ListItemText primary="Audits" />
                     </ListItem>
                 )}
-                {user?.is_staff && (
+                {user?.is_staff && !isViewingAsUser && (
                     <ListItem 
                         button 
                         onClick={() => handleNavigation('/admin')}
@@ -95,6 +98,23 @@ const Layout: React.FC = () => {
                     </ListItem>
                 )}
             </List>
+            <Divider />
+            {user?.is_staff && (
+                <List>
+                    <ListItem>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={isViewingAsUser}
+                                    onChange={toggleViewAsUser}
+                                    color="primary"
+                                />
+                            }
+                            label="View as User"
+                        />
+                    </ListItem>
+                </List>
+            )}
             <Divider />
             <List>
                 <ListItem button onClick={logout}>
@@ -128,7 +148,7 @@ const Layout: React.FC = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        {user?.is_staff ? 'Admin Dashboard' : 'Dashboard'}
+                        {user?.is_staff && !isViewingAsUser ? 'Admin Dashboard' : 'Dashboard'}
                     </Typography>
                 </Toolbar>
             </AppBar>
