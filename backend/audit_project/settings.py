@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'whitenoise.runserver_nostatic',
-    'apps.authentication',
-    'apps.audits',
-    'apps.core',
+    'apps.authentication.apps.AuthenticationConfig',
+    'apps.audits.apps.AuditsConfig',
+    'apps.core.apps.CoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -143,7 +143,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'authentication.User'
+AUTH_USER_MODEL = 'apps.authentication.User'
 
 # REST Framework settings
 REST_FRAMEWORK = {
