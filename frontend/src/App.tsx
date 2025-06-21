@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import theme from './theme';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/auth/LoginPage';
@@ -10,7 +10,6 @@ import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDetails from './pages/admin/UserDetails';
 import Layout from './components/Layout';
-import AuditDashboard from './components/audit/AuditDashboard';
 import CreateAudit from './components/audit/CreateAudit';
 import AuditDetails from './pages/audit/AuditDetails';
 import ChecklistView from './components/audit/ChecklistView';
